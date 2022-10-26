@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cypress open",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cypress run --spec 'cypress/e2e/**/*.cy.ts'"
   },
   "repository": {
     "type": "git",

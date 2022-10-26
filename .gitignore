@@ -3,6 +3,8 @@
 
 # tests
 /coverage
+/cypress/screenshots
+/cypress/videos
 
 # IDEs and editors
 /.idea
