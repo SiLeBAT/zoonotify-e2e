@@ -17,6 +17,7 @@ describe("Testing the /filterconfig endpoint", function () {
                 expect(response.body.filters).to.be.a("array");
             });
         });
+
         [
             "microorganism",
             "samplingYear",
@@ -51,6 +52,7 @@ describe("Testing the /filterconfig endpoint", function () {
                 });
             });
         });
+
         [
             "serovar",
             "carba_ampc_carba_phenotype",
