@@ -1,0 +1,19 @@
+{
+  "name": "zoonotify-e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SiLeBAT/zoonotify-e2e.git"
+  },
+  "author": "dptolle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SiLeBAT/zoonotify-e2e/issues"
+  },
+  "homepage": "https://github.com/SiLeBAT/zoonotify-e2e#readme"
+}
