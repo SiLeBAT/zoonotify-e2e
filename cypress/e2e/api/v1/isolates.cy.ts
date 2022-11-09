@@ -5,37 +5,28 @@ describe("Testing the /isolate endpoint", function () {
     describe("GET", function () {
         const method = "GET";
 
-        it("should retrieve one entry which includes required keys", function () {
+        it("should retrieve one E. coli entry from 1995; Sachsen", function () {
+
+            const testIsolateId = "f719dfa0-6779-48c5-998f-4b8f747910f4"
             cy.request({
                 method: method,
                 log: true,
-                url: baseUrl + "/1",
+                url: baseUrl + `/${testIsolateId}`,
                 headers: {
                     accept: "application/json",
                 },
             }).then(
                 (response) => {
                     expect(response.status).to.be.equal(200);
-                    expect(response.body.isolates).to.be.a("array");
-                    expect(response.body.isolates.length).to.equal(1);
-                    expect(response.body.isolates[0]).to.be.a("object");
-                    expect(response.body.isolates[0].microorganism).to.be.a("string");
-                    expect(response.body.isolates[0].samplingYear).to.be.a("number");
-                    expect(response.body.isolates[0].federalState).to.be.a("string");
-                    expect(response.body.isolates[0].samplingContext).to.be.a("string");
-                    expect(response.body.isolates[0].samplingStage).to.be.a("string");
-                    expect(response.body.isolates[0].origin).to.be.a("string");
-                    expect(response.body.isolates[0].category).to.be.a("string");
-                    expect(response.body.isolates[0].productionType).to.be.a("string");
-                    expect(response.body.isolates[0].matrix).to.be.a("string");
-                    expect(response.body.isolates[0].matrixDetail).to.be.a("string");
-                    expect(response.body.isolates[0].characteristics).to.be.a("object");
-                    expect(response.body.isolates[0].resistance).to.be.a("object");
+                    expect(response.body).to.be.a("object");
+                    expect(response.body.microorganism).to.equal("E. coli");
+                    expect(response.body.samplingYear).to.equal(1995);
+                    expect(response.body.federalState).to.equal("Sachsen");
                 }
             );
         });
 
-        it("should include all 1709 Campylobacter spp. entries only", function () {
+        it("should include all 1687 Campylobacter spp. entries only", function () {
             cy.request({
                 method: method,
                 log: true,
@@ -46,7 +37,7 @@ describe("Testing the /isolate endpoint", function () {
             }).then(
                 (response) => {
                     expect(response.status).to.be.equal(200);
-                    expect(response.body.isolates.length).to.equal(1709);
+                    expect(response.body.isolates.length).to.equal(1687);
                     response.body.isolates.forEach((entry: any) => {
                         expect(entry.microorganism).to.be.equal("Campylobacter spp.")
                     })
@@ -55,6 +46,8 @@ describe("Testing the /isolate endpoint", function () {
         });
 
         it("should include only entries with Matrix=Blinddarminhalt OR (Matrix=Kot AND MatrixDetail=Einzeltierprobe)", function () {
+
+            const numberOfSpecificEntriesInFixture = 3544;
             cy.request({
                 method: method,
                 log: true,
@@ -65,7 +58,7 @@ describe("Testing the /isolate endpoint", function () {
             }).then(
                 (response) => {
                     expect(response.status).to.be.equal(200);
-                    expect(response.body.isolates.length).to.equal(3459);
+                    expect(response.body.isolates.length).to.equal(numberOfSpecificEntriesInFixture);
                     let count = 0;
                     response.body.isolates.forEach((entry: any) => {
                         if (entry.matrix === 'Blinddarminhalt') {
@@ -75,7 +68,7 @@ describe("Testing the /isolate endpoint", function () {
                             count++;
                         }
                     })
-                    expect(count).to.equal(3459);
+                    expect(count).to.equal(numberOfSpecificEntriesInFixture);
                 }
             );
         });
