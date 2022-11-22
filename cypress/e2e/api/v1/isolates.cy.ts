@@ -403,5 +403,47 @@ describe("Testing the /isolate endpoint", function () {
                 );
             })
         })
+
+        describe("Microorganism AMR", function () {
+            it("should only include AMR positive STEC samples", function () {
+                cy.request({
+                    method: method,
+                    log: true,
+                    url: baseUrl + "/?resistance__STEC=AMR",
+                    headers: {
+                        accept: "application/json",
+                    },
+                }).then(
+                    (response) => {
+                        expect(response.status).to.be.equal(200);
+                        expect(response.body.isolates).to.be.a("array");
+                        response.body.isolates.forEach((isolate: any) => {
+                            expect(isolate.resistance.AMR.active).to.be.equal(true);
+                            expect(isolate.microorganism).to.be.equal('STEC');
+                        })
+                    }
+                );
+            });
+            it("should only include AMR & AZI positive STEC samples", function () {
+                cy.request({
+                    method: method,
+                    log: true,
+                    url: baseUrl + "/?resistance__STEC=AMR&resistance__STEC=AZI",
+                    headers: {
+                        accept: "application/json",
+                    },
+                }).then(
+                    (response) => {
+                        expect(response.status).to.be.equal(200);
+                        expect(response.body.isolates).to.be.a("array");
+                        response.body.isolates.forEach((isolate: any) => {
+                            expect(isolate.resistance.AMR.active).to.be.equal(true);
+                            expect(isolate.resistance.AZI.active).to.be.equal(true);
+                            expect(isolate.microorganism).to.be.equal('STEC');
+                        })
+                    }
+                );
+            });
+        })
     });
 });
