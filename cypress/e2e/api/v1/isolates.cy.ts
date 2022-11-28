@@ -87,7 +87,7 @@ describe("Testing the /isolate endpoint", function () {
                         expect(response.status).to.be.equal(200);
                         expect(response.body.isolates).to.be.a("array");
                         expect(response.body.isolates[0]).to.be.a("object");
-                        expect(response.body.isolates[0].characteristics).to.be.empty;
+                        expect(response.body.isolates[0].characteristics).to.be.a("undefined");
                     }
                 );
             });
@@ -196,7 +196,7 @@ describe("Testing the /isolate endpoint", function () {
                     }
                 );
             });
-            it("should include only h_group, o_group and genes key: applicable to STEC", function () {
+            it("should include only h_group, o_group and genes key: applicable to STEC", function () {                
                 /*
                 Example response:
 {
@@ -319,10 +319,10 @@ describe("Testing the /isolate endpoint", function () {
                 }).then(
                     (response) => {
                         expect(response.status).to.be.equal(200);
-                        expect(response.body.characteristics.o_group).to.be.a("116");
-                        expect(response.body.characteristics.h_group).to.be.a("NM");
-                        expect(response.body.characteristics.genes.stx_1).to.equal(false);
-                        expect(response.body.characteristics.genes.stx_2).to.equal(true);
+                        expect(response.body.characteristics.o_group).to.equal(("116"))
+                        expect(response.body.characteristics.h_group).to.equal("NM");
+                        expect(response.body.characteristics.genes.stx1).to.equal(false);
+                        expect(response.body.characteristics.genes.stx2).to.equal(true);
                         expect(response.body.characteristics.genes.eae).to.equal(false);
                         expect(response.body.characteristics.genes.e_hly).to.equal(null);
                     }
@@ -339,10 +339,10 @@ describe("Testing the /isolate endpoint", function () {
                 }).then(
                     (response) => {
                         expect(response.status).to.be.equal(200);
-                        expect(response.body.characteristics.o_group).to.be.a("15");
-                        expect(response.body.characteristics.h_group).to.be.a("[H27]");
-                        expect(response.body.characteristics.genes.stx_1).to.equal(true);
-                        expect(response.body.characteristics.genes.stx_2).to.equal(true);
+                        expect(response.body.characteristics.o_group).to.equal("15");
+                        expect(response.body.characteristics.h_group).to.equal("[H27]");
+                        expect(response.body.characteristics.genes.stx1).to.equal(true);
+                        expect(response.body.characteristics.genes.stx2).to.equal(true);
                         expect(response.body.characteristics.genes.eae).to.equal(false);
                         expect(response.body.characteristics.genes.e_hly).to.equal(false);
 
