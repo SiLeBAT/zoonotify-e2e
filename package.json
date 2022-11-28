@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/SiLeBAT/zoonotify-e2e#readme",
   "dependencies": {
-    "cypress": "^10.11.0",
     "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "cypress": "^11.1.0"
   }
 }
