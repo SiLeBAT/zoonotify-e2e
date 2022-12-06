@@ -224,92 +224,7 @@ describe("Testing the /isolate endpoint", function () {
                     }
                 );
             });
-            it("should include only h_group, o_group and genes key: applicable to STEC", function () {
-                /*
-                Example response:
-{
-    "isolateId": "85",
-    "bfrId": "b95e58e2-5fd5-4385-8f54-53ca6acd98b3",
-    "microorganism": "STEC",
-    "samplingYear": 1995,
-    "federalState": "Sachsen",
-    "samplingContext": "Zoonosen-Monitoring",
-    "samplingStage": "Einzelhandel",
-    "origin": "Lebensmittel",
-    "category": "kleine Wiederkäuer",
-    "productionType": "Lamm",
-    "matrix": "Frisches Fleisch",
-    "matrixDetail": "gekühlt oder tiefgefroren",
-    "characteristics": {
-        "o_group": "116",
-        "h_group": "15",
-        "genes": {
-            "stx_1": false,
-            "stx_2": true,
-            "eae": false,
-            "e_hly": null,
-        }
-    },
-    "resistance": {
-        "GEN": {
-            "active": false,
-            "value": "0.5"
-        },
-        "CHL": {
-            "active": false,
-            "value": "8"
-        },
-        "CIP": {
-            "active": false,
-            "value": "0.015"
-        },
-        "TMP": {
-            "active": false,
-            "value": "0.25"
-        },
-        "SMX": {
-            "active": false,
-            "value": "8"
-        },
-        "TET": {
-            "active": false,
-            "value": "2"
-        },
-        "FOT": {
-            "active": false,
-            "value": "0.25"
-        },
-        "TAZ": {
-            "active": false,
-            "value": "0.5"
-        },
-        "NAL": {
-            "active": false,
-            "value": "4"
-        },
-        "AMP": {
-            "active": false,
-            "value": "4"
-        },
-        "COL": {
-            "active": false,
-            "value": "1"
-        },
-        "AZI": {
-            "active": false,
-            "value": "4"
-        },
-        "TGC": {
-            "active": false,
-            "value": "0.25"
-        },
-        "MERO": {
-            "active": false,
-            "value": "0.03"
-        }
-    }
-}
-                */
+            it("should include only h_group, o_group and genes key: applicable to STEC", function () {                
                 cy.request({
                     method: method,
                     log: true,
@@ -426,7 +341,12 @@ describe("Testing the /isolate endpoint", function () {
                         expect(response.body.isolates[0].characteristics.genes).to.be.a("undefined");
                         expect(response.body.isolates[0].characteristics.serotype).to.be.a("undefined");
                         expect(response.body.isolates[0].characteristics.clonal_group).to.be.a("string");
-                        expect(response.body.isolates[0].characteristics.spa_type).to.be.a("string");
+                        if(response.body.isolates[0].characteristics.spa_type) {
+                            expect(response.body.isolates[0].characteristics.spa_type).to.be.a("string");
+                        } 
+                        else {
+                            expect(response.body.isolates[0].characteristics.spa_type).to.equal(null);
+                        }
                     }
                 );
             })
