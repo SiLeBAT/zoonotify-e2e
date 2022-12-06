@@ -73,6 +73,34 @@ describe("Testing the /isolate endpoint", function () {
             );
         });
 
+        it("should include only entries with matrixDetail__Blinddarminhalt=Einzeltierprob OR matrixDetail__Frisches Fleisch=gekühlt", function () {
+
+            cy.request({
+                method: method,
+                log: true,
+                url: baseUrl + "/?matrixDetail__Blinddarminhalt=Einzeltierprobe&matrixDetail__Frisches Fleisch=gekühlt",
+                headers: {
+                    accept: "application/json",
+                },
+            }).then(
+                (response) => {
+                    expect(response.status).to.be.equal(200);
+                    response.body.isolates.forEach((entry: any) => {
+
+                        if (entry.matrix === 'Blinddarminhalt') {
+                            expect(entry.matrixDetail).to.equal("Einzeltierprobe");
+                        }
+                        else if (entry.matrix === 'Frisches Fleisch') {
+                            expect(entry.matrixDetail).to.equal("gekühlt");
+                        }
+                        else {
+                            expect(true).to.equal(false);
+                        }
+                    })
+                }
+            );
+        });
+
         describe("Microorganism Characteristics", function () {
             it("should NOT include a characteristic key: E. coli have no characteristics", function () {
                 cy.request({
@@ -196,7 +224,7 @@ describe("Testing the /isolate endpoint", function () {
                     }
                 );
             });
-            it("should include only h_group, o_group and genes key: applicable to STEC", function () {                
+            it("should include only h_group, o_group and genes key: applicable to STEC", function () {
                 /*
                 Example response:
 {
@@ -402,6 +430,91 @@ describe("Testing the /isolate endpoint", function () {
                     }
                 );
             })
+            it("should include only stx1 positive STEC samples", function () {
+                cy.request({
+                    method: method,
+                    log: true,
+                    url: baseUrl + "/?genes__STEC=stx1",
+                    headers: {
+                        accept: "application/json",
+                    },
+                }).then(
+                    (response) => {
+                        expect(response.status).to.be.equal(200);
+                        response.body.isolates.forEach((isolate: any) => {
+                            expect(isolate.characteristics.genes.stx1).to.equal(true);
+                            expect(isolate.microorganism).to.be.equal('STEC');
+                        })
+
+
+                    }
+                );
+            });
+            it("should include only stx1 && stx2 positive STEC samples", function () {
+                cy.request({
+                    method: method,
+                    log: true,
+                    url: baseUrl + "/?genes__STEC=stx1&genes__STEC=stx2",
+                    headers: {
+                        accept: "application/json",
+                    },
+                }).then(
+                    (response) => {
+                        expect(response.status).to.be.equal(200);
+                        response.body.isolates.forEach((isolate: any) => {
+                            expect(isolate.characteristics.genes.stx1).to.equal(true);
+                            expect(isolate.characteristics.genes.stx2).to.equal(true);
+                            expect(isolate.microorganism).to.be.equal('STEC');
+                        })
+
+
+                    }
+                );
+            });
+
+            it("should include only O_group = 100 && h_group = NM  STEC samples", function () {
+                cy.request({
+                    method: method,
+                    log: true,
+                    url: baseUrl + "/?o_group__STEC=100&h_group__STEC=NM",
+                    headers: {
+                        accept: "application/json",
+                    },
+                }).then(
+                    (response) => {
+                        expect(response.status).to.be.equal(200);
+                        response.body.isolates.forEach((isolate: any) => {
+                            expect(isolate.characteristics.o_group).to.equal("100");
+                            expect(isolate.characteristics.h_group).to.equal("NM");
+                            expect(isolate.microorganism).to.be.equal('STEC');
+                        })
+
+
+                    }
+                );
+            });
+
+            it("should include only spa_type__MRSA=t001 OR spa_type__MRSA=t008  MRSA samples", function () {
+                cy.request({
+                    method: method,
+                    log: true,
+                    url: baseUrl + "/?spa_type__MRSA=t001&spa_type__MRSA=t008",
+                    headers: {
+                        accept: "application/json",
+                    },
+                }).then(
+                    (response) => {
+                        expect(response.status).to.be.equal(200);
+                        response.body.isolates.forEach((isolate: any) => {
+                            expect(isolate.characteristics.spa_type).to.equal("t001");
+                            expect(isolate.characteristics.spa_type).to.equal("t008");
+                            expect(isolate.microorganism).to.be.equal('MRSA');
+                        })
+
+
+                    }
+                );
+            });
         })
 
         describe("Microorganism AMR", function () {
@@ -424,7 +537,7 @@ describe("Testing the /isolate endpoint", function () {
                     }
                 );
             });
-            it("should only include AMR & AZI positive STEC samples", function () {
+            it("should only include AMR && AZI positive STEC samples", function () {
                 cy.request({
                     method: method,
                     log: true,
